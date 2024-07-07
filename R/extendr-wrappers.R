@@ -10,19 +10,45 @@
 #' @useDynLib rfaster2, .registration = TRUE
 NULL
 
-#' Return vector of fastq read lengths
-#'@export
+#' FASTQ read lengths
+#' 
+#' Obtain read lengths from a fastq/fastq.gz file 
+#' 
+#' @param infile Path to fastq/fastq.gz file
+#' @return Numeric vector with fastq records lengths
+#' @export
 fq_lengths <- function(infile) .Call(wrap__fq_lengths, infile)
 
-#' Return vector of 'mean' fastq read quality values
+#' FASTQ 'mean' quality scores
+#' 
+#' Obtain'mean' fastq read quality values. Mean Phred scores are calculated by converting to probabiliy, calculating mean quality, then converting back to Phred.
+#' 
+#' @param infile Path to fastq/fastq.gz file
+#' @param phred Logical, report Phred score (error probability otherwise)
+#' @return Numeric vector with 'mean' quality score per read
 #' @export
-#' Return number of reads in a fastq file
-#' @export
-fq_nreads <- function(infile) .Call(wrap__fq_nreads, infile)
+fq_quals <- function(infile, phred) .Call(wrap__fq_quals, infile, phred)
 
-#' Return number of bases in a fastq file
+#' FASTQ number of reads
+#' 
+#' Obtain the number of reads in a fastq/fastq.gz file
+#' 
+#' @param infile Path to fastq/fastq.gz file
+#' @return Numeric 
 #' @export
-fq_nbases <- function(infile) .Call(wrap__fq_nbases, infile)
+fq_reads <- function(infile) .Call(wrap__fq_reads, infile)
+
+#' FASTQ number of bases
+#' 
+#' Obtain the number of bases in a fastq/fastq.gz file
+#' 
+#' @param infile Path to fastq/fastq.gz file
+#' @return Numeric
+#' @export
+fq_bases <- function(infile) .Call(wrap__fq_bases, infile)
+
+#' Return vector with summary values for the fastq file, this is not exported in the R package namespace
+rust_summary <- function(infile) .Call(wrap__rust_summary, infile)
 
 
 # nolint end
