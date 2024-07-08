@@ -5,9 +5,31 @@
 This package exports some of the functions of the Rust program [`faster2`]() in `R`. It uses Rust code (thanks to the [`extendr`]() library) and is therefore pretty fast.
 
 ## Install
-If you have the rust toolchain:
+
+If you have the rust toolchain
+
+``` r
+remotes::install_github('angelovangel/rfaster2')
 ```
-devtools::install_github('angelovangel/rfaster2')
+
+If you don't have it, Rust can be installed with
+
+``` bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+If you don't want to setup Rust, use compiled GitHub releases. Binary packages are available for Linux (x86_64)
+
+``` r
+```
+
+and for macOS (aarch64, a.k.a. Apple Silicon)
+
+``` r
+install.packages(
+  "https://github.com/angelovangel/rfaster2/releases/download/v0.1.0/rfaster2_0.1.0_macos_aarch64.tgz",
+  repos = NULL
+)
 ```
 
 ## Use
@@ -25,4 +47,3 @@ fq_summary(infile = path/to/fastqfile)
 f <- list.files('path', pattern = 'fastq', full.names = T)
 lapply(f, fq_summary) %>% dplyr::bind_rows()
 ```
-

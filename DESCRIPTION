@@ -1,12 +1,11 @@
 Package: rfaster2
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Port Faster2 To R 
+Version: 0.1.0
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
+    person("Angel", "Angelov", , "aangeloo@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Description: This package exports some of the functions of the Rust program faster2 in R. It can be used to get statistics about the records in a fastq/fastq.gz file.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2

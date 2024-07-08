@@ -1,3 +1,4 @@
 ^rfaster2\.Rproj$
 ^\.Rproj\.user$
 ^src/\.cargo$
+^LICENSE\.md$
