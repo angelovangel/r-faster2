@@ -21,6 +21,10 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 If you don't want to setup Rust, use compiled GitHub releases. Binary packages are available for Linux (x86_64)
 
 ``` r
+install.packages(
+https://github.com/angelovangel/rfaster2/releases/download/v0.1.0/rfaster2_0.1.0_R_x86_64-pc-linux-gnu.tar.gz
+repos = NULL
+)
 ```
 
 and for macOS (aarch64, a.k.a. Apple Silicon)
