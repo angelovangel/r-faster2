@@ -4,10 +4,21 @@
 \alias{fq_report}
 \title{fastq html summary report}
 \usage{
-fq_report(inpath)
+fq_report(
+  inpath,
+  pattern = "fast(q|q.gz)$",
+  platform = "Nanopore",
+  outfile = "rfaster2-report.html"
+)
 }
 \arguments{
 \item{inpath}{A path to folder containing fastq/fastq.gz files}
+
+\item{pattern}{Regex pattern to search for fastq files}
+
+\item{platform}{Sequencing platform used}
+
+\item{outfile}{name of html report file, default is rfaster2-report.html, written in the calling directory}
 }
 \description{
 Generate html summary report for the fastq files in a folder
