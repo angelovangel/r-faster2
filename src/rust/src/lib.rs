@@ -1,6 +1,59 @@
 use extendr_api::prelude::*;
 use kseq::parse_path;
 
+// helper functions 
+fn get_n_bases(seq: &[u8]) -> i64 {
+    let mut n = 0;
+    for s in seq {
+        if matches!(s, &78u8 | &110u8) { // N or n
+            n += 1;
+        }
+    }
+    n
+}
+
+fn get_gc_bases(seq: &[u8]) -> i64 {
+    let mut n: i64 = 0;
+    for s in seq {
+        if matches!(s, &103u8 | &71u8 |  &99u8 | &67u8) { //G, g, C or c
+            n += 1;
+        }
+    }
+        n
+}
+
+fn get_qual_bases(q: &[u8], qx: u8) -> i64 {
+    let mut n = 0;
+    // functional style is much slower?
+    //q.iter().filter(|x| **x >= qx).collect::<Vec<&u8>>().len() as i64
+    for item in q {
+        if *item >= qx {
+            n += 1
+        }
+    }
+    n
+}
+
+fn get_nx(numbers: &mut [i64], fraction: f32) -> i64 {
+    numbers.sort_unstable();
+
+    // half of the bases
+    let halfsum = numbers.iter().sum::<i64>() as f32 * fraction; // f32 * f32
+
+    // cumsum of the sorted vector
+    let cumsum = numbers
+        .iter()
+        .scan(0, |sum, i| {
+            *sum += i;
+            Some(*sum)
+        })
+        .collect::<Vec<_>>();
+    let n50_index = cumsum.iter().position(|&x| x > halfsum as i64).unwrap();
+
+    numbers[n50_index]
+}
+// helper functions 
+
 
 /// FASTQ read lengths
 /// 
@@ -20,7 +73,27 @@ fn fq_lengths(infile: &str) -> Vec<i64> {
         len_vector.push(len);
     }
     len_vector
-} 
+}
+
+/// FASTQ GC contents
+/// 
+/// Obtain per read GC contents from a fastq/fastq.gz file
+/// 
+/// @param infile Path to fastq/fastq.gz file
+/// @return Numeric vector with GC content (fraction) per record
+/// @export
+#[extendr]
+fn fq_gc(infile: &str) -> Vec<f32> {
+    let mut gc_vector: Vec<f32> = Vec::new();
+    //let mut bases: i64 = 0;
+    let mut records = parse_path(infile).unwrap();
+    
+    while let Some(record) = records.iter_record().unwrap() {
+        let n = get_gc_bases(record.seq().as_bytes());
+        gc_vector.push(n as f32 / record.len() as f32);
+    }
+    gc_vector
+}
 
 // helper function for fq_quals
 fn qscore_probs(q: &[u8]) -> f32 {
@@ -90,59 +163,6 @@ fn fq_bases(infile: &str) -> i64 {
     bases
 }
 
-
-// helper functions for summary
-fn get_n_bases(seq: &[u8]) -> i64 {
-    let mut n = 0;
-    for s in seq {
-        if matches!(s, &78u8 | &110u8) { // N or n
-            n += 1;
-        }
-    }
-    n
-}
-
-fn get_gc_bases(seq: &[u8]) -> i64 {
-    let mut n: i64 = 0;
-    for s in seq {
-        if matches!(s, &103u8 | &71u8 |  &99u8 | &67u8) { //G, g, C or c
-            n += 1;
-        }
-    }
-        n
-}
-
-fn get_qual_bases(q: &[u8], qx: u8) -> i64 {
-    let mut n = 0;
-    // functional style is much slower?
-    //q.iter().filter(|x| **x >= qx).collect::<Vec<&u8>>().len() as i64
-    for item in q {
-        if *item >= qx {
-            n += 1
-        }
-    }
-    n
-}
-
-fn get_nx(numbers: &mut [i64], fraction: f32) -> i64 {
-    numbers.sort_unstable();
-
-    // half of the bases
-    let halfsum = numbers.iter().sum::<i64>() as f32 * fraction; // f32 * f32
-
-    // cumsum of the sorted vector
-    let cumsum = numbers
-        .iter()
-        .scan(0, |sum, i| {
-            *sum += i;
-            Some(*sum)
-        })
-        .collect::<Vec<_>>();
-    let n50_index = cumsum.iter().position(|&x| x > halfsum as i64).unwrap();
-
-    numbers[n50_index]
-}
-
 /// Return vector with summary values for the fastq file, this is not exported in the R package namespace
 #[extendr]
 //filename, reads, bases, num_n, min_len, max_len, n50, gc_content, q20
@@ -183,6 +203,7 @@ fn rust_summary(infile: &str) -> Vec<i64> {
 extendr_module! {
     mod rfaster2;
     fn fq_lengths;
+    fn fq_gc;
     fn fq_quals;
     fn fq_reads;
     fn fq_bases;

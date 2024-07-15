@@ -19,6 +19,15 @@ NULL
 #' @export
 fq_lengths <- function(infile) .Call(wrap__fq_lengths, infile)
 
+#' FASTQ GC contents
+#' 
+#' Obtain per read GC contents from a fastq/fastq.gz file
+#' 
+#' @param infile Path to fastq/fastq.gz file
+#' @return Numeric vector with GC content (fraction) per record
+#' @export
+fq_gc <- function(infile) .Call(wrap__fq_gc, infile)
+
 #' FASTQ 'mean' quality scores
 #' 
 #' Obtain'mean' fastq read quality values. Mean Phred scores are calculated by converting to probabiliy, calculating mean quality, then converting back to Phred.

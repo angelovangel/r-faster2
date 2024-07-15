@@ -72,7 +72,15 @@ The report contains
 
 ```{r table1, include=TRUE}
 
-knitr::kable(stats, digits = 2, caption = 'Table 1. FASTQ files statistics', format.args = list(big.mark = ","))
+kableExtra::kbl(
+  stats, 
+  digits = 2, caption = 'Table 1. FASTQ files statistics', 
+  format.args = list(big.mark = ",")
+  ) %>%
+  kable_styling(
+    fixed_thead = TRUE, bootstrap_options = c("responsive")
+  )
+
 
 ```
 
@@ -83,48 +91,15 @@ knitr::kable(stats, digits = 2, caption = 'Table 1. FASTQ files statistics', for
 # table with gc and qscore histogram sparklines
 sparkline(0) # load dependencies
 
-spk_tool <- function(label, x, values) {
-   htmlwidgets::JS(
-     sprintf(
- 		"function(sparkline, options, field){ return %s[field[0].offset]; }",
-     jsonlite::toJSON(paste(label, x, ":",values, sep = " "))
-     )
-   )
-}
-
-qscore_density <- function(file) {
-  
-  qscores <- rfaster2::fq_quals(file, phred = T)
-    # actually use density() here, not hist(). It returns a density list object with x and y, x is fixed from 1 to 50
-    density_obj <- density(qscores, from = 1, to = 60, n = 60, na.rm = TRUE) # n is the number of equally spaced points at which the density is to be estimated.
-    density_obj
-}
-
-spark_phred <- function(phred_density_obj) {
-	#spk_chr(paste( round(phred_density_obj$x, digits = 2), ":", phred_density_obj$y, sep = ""),
-  fillcolor <- "#5D6D7E"
-	sparkline::spk_chr(round(phred_density_obj$y, digits = 2), 
-					type = "bar",
-					 # to highlight q-value of 30, only array (60 elements) seems to work, don't know how to pass range map here
-					colorMap = c(
-					  rep(fillcolor, 9), "red", 
-					  rep(fillcolor, 9), "red", 
-					  rep(fillcolor, 9), "red", 
-					  rep(fillcolor, 9), "red", 
-					  rep(fillcolor, 19)
-					  ),
-					width = 140, height = 40,
-					tooltipFormatter = spk_tool("qscore ",phred_density_obj$x, round(phred_density_obj$y, 2))
-					)
-}
-
-q_scores_density <- lapply(fastqfiles, qscore_density)
+q_scores_densities <- lapply(fastqfiles, qscore_density)
+len_densities <- lapply(fastqfiles, len_density)
+gc_densities <- lapply(fastqfiles, gc_density)
 
 df <- data.frame(
 	file = basename(fastqfiles),
-	#gc_content_dist = sapply(gc_density, spark_gc),
-	q_score_dist = sapply(q_scores_density, spark_phred),
-	#len_dist = sapply(len_density, spark_len),
+	len_dist = sapply(len_densities, spark_len),
+	gc_content_dist = sapply(gc_densities, spark_gc),
+	q_score_dist = sapply(q_scores_densities, spark_phred),
 	#kmer_counts = sapply(kmers_tbl_list, spark_kmers), 
 	row.names = NULL
   )
