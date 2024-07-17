@@ -16,6 +16,9 @@ params:
  fastq_pattern:
   label: "Regex to capture fastq files (and obtain sample names)"
   value: "fast(q|q.gz)$"
+ subsample:
+   label: "Subsample a fraction of the records to speed up calculations"
+   value: 1
  platform:
   label: "Sequencing platform"
   choices: ["Illumina", "Nanopore", "PacBio"]
@@ -91,16 +94,20 @@ kableExtra::kbl(
 # table with gc and qscore histogram sparklines
 sparkline(0) # load dependencies
 
-q_scores_densities <- lapply(fastqfiles, qscore_density)
+# get nth based on subsample
+thisnth = floor(1/params$subsample)
+
+q_scores_densities <- lapply(fastqfiles, qscore_density, phred = T, nth = thisnth)
 len_densities <- lapply(fastqfiles, len_density)
-gc_densities <- lapply(fastqfiles, gc_density)
+gc_densities <- lapply(fastqfiles, gc_density, nth = thisnth)
+kmers <- lapply(fastqfiles, get_kmers, kmer = 3, nth = thisnth)
 
 df <- data.frame(
 	file = basename(fastqfiles),
 	len_dist = sapply(len_densities, spark_len),
 	gc_content_dist = sapply(gc_densities, spark_gc),
 	q_score_dist = sapply(q_scores_densities, spark_phred),
-	#kmer_counts = sapply(kmers_tbl_list, spark_kmers), 
+	kmer_counts = sapply(kmers, spark_kmers), 
 	row.names = NULL
   )
 table2_caption <- "Table 2. Density distributions of length, GC-content and 'mean' q-score. The q-scores 10, 20, 30, 40 are in red"

@@ -2,6 +2,7 @@
 
 export(fq_bases)
 export(fq_gc)
+export(fq_kmers)
 export(fq_lengths)
 export(fq_quals)
 export(fq_reads)

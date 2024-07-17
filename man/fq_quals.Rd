@@ -4,12 +4,14 @@
 \alias{fq_quals}
 \title{FASTQ 'mean' quality scores}
 \usage{
-fq_quals(infile, phred)
+fq_quals(infile, phred, nth)
 }
 \arguments{
 \item{infile}{Path to fastq/fastq.gz file}
 
 \item{phred}{Logical, report Phred score (error probability otherwise)}
+
+\item{nth}{calculate qual for every nth record - used to subsample big fastq files}
 }
 \value{
 Numeric vector with 'mean' quality score per read

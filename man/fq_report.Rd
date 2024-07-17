@@ -8,6 +8,7 @@ fq_report(
   inpath,
   pattern = "fast(q|q.gz)$",
   platform = "Nanopore",
+  subsample = 1,
   outfile = "rfaster2-report.html"
 )
 }
@@ -17,6 +18,8 @@ fq_report(
 \item{pattern}{Regex pattern to search for fastq files}
 
 \item{platform}{Sequencing platform used}
+
+\item{subsample}{Subsample a fraction of the records to speed up calculations}
 
 \item{outfile}{name of html report file, default is rfaster2-report.html, written in the calling directory}
 }

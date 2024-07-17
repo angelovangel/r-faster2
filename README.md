@@ -22,8 +22,9 @@ If you don't want to setup Rust, use compiled GitHub releases. Binary packages a
 
 ``` r
 install.packages(
-https://github.com/angelovangel/rfaster2/releases/download/v0.1.0/rfaster2_0.1.0_R_x86_64-pc-linux-gnu.tar.gz
-repos = NULL
+  "https://github.com/angelovangel/rfaster2/releases/download/v0.1.0/rfaster2_0.1.0_R_x86_64-pc-linux-gnu.tar.gz",
+  dependencies = TRUE,
+  repos = NULL
 )
 ```
 
@@ -32,6 +33,7 @@ and for macOS (aarch64, a.k.a. Apple Silicon)
 ``` r
 install.packages(
   "https://github.com/angelovangel/rfaster2/releases/download/v0.1.0/rfaster2_0.1.0_macos_aarch64.tgz",
+  dependencies = TRUE,
   repos = NULL
 )
 ```

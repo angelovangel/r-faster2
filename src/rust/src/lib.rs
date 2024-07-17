@@ -1,5 +1,6 @@
 use extendr_api::prelude::*;
 use kseq::parse_path;
+use std::collections::BTreeMap;
 
 // helper functions 
 fn get_n_bases(seq: &[u8]) -> i64 {
@@ -80,15 +81,25 @@ fn fq_lengths(infile: &str) -> Vec<i64> {
 /// Obtain per read GC contents from a fastq/fastq.gz file
 /// 
 /// @param infile Path to fastq/fastq.gz file
+/// @param nth calculate gc for every nth record - used to subsample big fastq files
 /// @return Numeric vector with GC content (fraction) per record
 /// @export
 #[extendr]
-fn fq_gc(infile: &str) -> Vec<f32> {
+fn fq_gc(infile: &str, nth: i32) -> Vec<f32> {
+    if nth < 0 {
+        panic!("Use nth > 0");
+    }
+    let mut recn: i32 = 0;
     let mut gc_vector: Vec<f32> = Vec::new();
     //let mut bases: i64 = 0;
     let mut records = parse_path(infile).unwrap();
     
     while let Some(record) = records.iter_record().unwrap() {
+        recn += 1;
+        if recn != nth {
+            continue;
+        }
+        recn = 0;
         let n = get_gc_bases(record.seq().as_bytes());
         gc_vector.push(n as f32 / record.len() as f32);
     }
@@ -112,13 +123,20 @@ fn qscore_probs(q: &[u8]) -> f32 {
 /// 
 /// @param infile Path to fastq/fastq.gz file
 /// @param phred Logical, report Phred score (error probability otherwise)
+/// @param nth calculate qual for every nth record - used to subsample big fastq files
 /// @return Numeric vector with 'mean' quality score per read
 /// @export
 #[extendr]
-fn fq_quals(infile: &str, phred: bool) -> Vec<f32> {
+fn fq_quals(infile: &str, phred: bool, nth: i32) -> Vec<f32> {
+    let mut recn: i32 = 0;
     let mut qual_vector: Vec<f32> = Vec::new();
     let mut records = parse_path(infile).unwrap();
     while let Some(record) = records.iter_record().unwrap() {
+        recn += 1;
+        if recn != nth {
+            continue;
+        }
+        recn = 0;
         let mean_prob = qscore_probs( record.qual().as_bytes() ) / record.len() as f32;
         if phred {
             qual_vector.push(-10.0 * mean_prob.log10()); // convert mean_prob to phred score
@@ -161,6 +179,48 @@ fn fq_bases(infile: &str) -> i64 {
         bases += record.len() as i64;
     }
     bases
+}
+
+/// FASTQ k-mer counts
+/// 
+/// Get k-mer counts in a fastq/fastq.gz file
+/// 
+/// @param infile Path to fastq/fastq.gz file
+/// @param k kmer length
+/// @param nth calculate kmer for every nth record - used to subsample big fastq files
+/// @return Numeric vector of k-mer counts (sorted by k-mer key)
+/// @export
+#[extendr]
+fn fq_kmers(infile: &str, k: usize, nth: i32) -> Vec<i32> {
+    if nth < 0 {
+        panic!("Use nth > 0");
+    }
+    let mut recn: i32 = 0;
+    let mut kmer_counts: BTreeMap<String, i32> = BTreeMap::new(); // this is sorted by key by default!
+    let mut kmer_vec = Vec::new();
+    let mut records = parse_path(infile).unwrap();
+    while let Some(record) = records.iter_record().unwrap() {
+        recn += 1;
+        if recn != nth {
+            continue;
+        }
+        recn = 0;
+        let seq_str = record.seq();
+        // dont use the read if its length is < k + 1
+        if seq_str.len() < k + 1 {
+            continue;
+        }
+        for c in 0..seq_str.len() - k + 1 {
+            let subseq = &seq_str[c..c + k];
+            *kmer_counts.entry(subseq.to_string() ).or_insert(0) += 1;
+        }
+    }
+
+    for (_key, value) in &kmer_counts {
+        //println!("{}\t{}", key, value);
+        kmer_vec.push(*value);
+    }
+    kmer_vec
 }
 
 /// Return vector with summary values for the fastq file, this is not exported in the R package namespace
@@ -207,5 +267,6 @@ extendr_module! {
     fn fq_quals;
     fn fq_reads;
     fn fq_bases;
+    fn fq_kmers;
     fn rust_summary;
 }

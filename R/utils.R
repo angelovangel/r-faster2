@@ -39,9 +39,9 @@ spark_len <- function(len_density_obj) {
 ### LENGTHS ###
 
 ### GC-content
-gc_density <- function(infile) {
+gc_density <- function(infile, nth) {
 
-  density_obj <- rfaster2::fq_gc(infile) %>%
+  density_obj <- rfaster2::fq_gc(infile, nth) %>%
     as.numeric() %>%
     # actually use density() here, not hist(). It returns a density list object with x and y, x is fixed from 1 to 100
     density(from = 0, to = 1, n = 100, na.rm = TRUE) # n is the number of equally spaced points at which the density is to be estimated.
@@ -66,9 +66,9 @@ spark_gc <- function(gc_density_obj) {
 
 ### Q-SCORES ###
 
-qscore_density <- function(file) {
+qscore_density <- function(file, phred, nth) {
 
-  qscores <- rfaster2::fq_quals(file, phred = T)
+  qscores <- rfaster2::fq_quals(infile = file, phred = phred, nth = nth)
   # actually use density() here, not hist(). It returns a density list object with x and y, x is fixed from 1 to 50
   density_obj <- density(qscores, from = 1, to = 60, n = 60, na.rm = TRUE) # n is the number of equally spaced points at which the density is to be estimated.
   density_obj
@@ -94,3 +94,19 @@ spark_phred <- function(phred_density_obj) {
 }
 ### Q-SCORES ###
 
+### K-MERS ###
+get_kmers <- function(infile, kmer, nth) {
+  rfaster2::fq_kmers(infile, kmer, nth)
+}
+
+spark_kmers <- function(kmers_vec) {
+  fillcolor <- "#5D6D7E"
+  spk_chr(kmers_vec, type = "bar",
+          barColor = "#5D6D7E",
+          #colorMap = c("red", rep(fillcolor, 15), "red", rep(fillcolor, 15), "red", rep(fillcolor, 15), "red", rep(fillcolor, 15)),
+          width = 220, height = 40
+          #tooltipFormatter = spk_tool("", kmers_tbl$kmer, kmers_tbl$counts)
+  )
+}
+
+### K-MERS ###

@@ -4,10 +4,12 @@
 \alias{fq_gc}
 \title{FASTQ GC contents}
 \usage{
-fq_gc(infile)
+fq_gc(infile, nth)
 }
 \arguments{
 \item{infile}{Path to fastq/fastq.gz file}
+
+\item{nth}{calculate gc for every nth record - used to subsample big fastq files}
 }
 \value{
 Numeric vector with GC content (fraction) per record

@@ -24,9 +24,10 @@ fq_lengths <- function(infile) .Call(wrap__fq_lengths, infile)
 #' Obtain per read GC contents from a fastq/fastq.gz file
 #' 
 #' @param infile Path to fastq/fastq.gz file
+#' @param nth calculate gc for every nth record - used to subsample big fastq files
 #' @return Numeric vector with GC content (fraction) per record
 #' @export
-fq_gc <- function(infile) .Call(wrap__fq_gc, infile)
+fq_gc <- function(infile, nth) .Call(wrap__fq_gc, infile, nth)
 
 #' FASTQ 'mean' quality scores
 #' 
@@ -34,9 +35,10 @@ fq_gc <- function(infile) .Call(wrap__fq_gc, infile)
 #' 
 #' @param infile Path to fastq/fastq.gz file
 #' @param phred Logical, report Phred score (error probability otherwise)
+#' @param nth calculate qual for every nth record - used to subsample big fastq files
 #' @return Numeric vector with 'mean' quality score per read
 #' @export
-fq_quals <- function(infile, phred) .Call(wrap__fq_quals, infile, phred)
+fq_quals <- function(infile, phred, nth) .Call(wrap__fq_quals, infile, phred, nth)
 
 #' FASTQ number of reads
 #' 
@@ -55,6 +57,17 @@ fq_reads <- function(infile) .Call(wrap__fq_reads, infile)
 #' @return Numeric
 #' @export
 fq_bases <- function(infile) .Call(wrap__fq_bases, infile)
+
+#' FASTQ k-mer counts
+#' 
+#' Get k-mer counts in a fastq/fastq.gz file
+#' 
+#' @param infile Path to fastq/fastq.gz file
+#' @param k kmer length
+#' @param nth calculate kmer for every nth record - used to subsample big fastq files
+#' @return Numeric vector of k-mer counts (sorted by k-mer key)
+#' @export
+fq_kmers <- function(infile, k, nth) .Call(wrap__fq_kmers, infile, k, nth)
 
 #' Return vector with summary values for the fastq file, this is not exported in the R package namespace
 rust_summary <- function(infile) .Call(wrap__rust_summary, infile)
