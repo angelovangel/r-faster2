@@ -31,7 +31,7 @@ spark_len <- function(len_density_obj) {
           minSpotColor = FALSE,
           maxSpotColor = "red",
           spotRadius = 3,
-          width = 260, height = 40,
+          width = 220, height = 40,
           tooltipFormat = "<span style='color: {{color}}'>&#9679;</span> {{prefix}}length: {{x}} {{suffix}}</span>",
           numberFormatter = log_formatter
   )

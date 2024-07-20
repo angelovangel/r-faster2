@@ -1,9 +1,8 @@
 Package: rfaster2
 Title: Port Faster2 To R 
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: 
-    person("Angel", "Angelov", , "aangeloo@gmail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+    person("Angel", "Angelov", , "aangeloo@gmail.com", role = c("aut", "cre"))
 Description: This package exports some of the functions of the Rust program faster2 in R. It can be used to get statistics about the records in a fastq/fastq.gz file.
 License: MIT + file LICENSE
 Encoding: UTF-8

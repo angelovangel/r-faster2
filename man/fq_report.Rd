@@ -19,7 +19,7 @@ fq_report(
 
 \item{platform}{Sequencing platform used}
 
-\item{subsample}{Subsample a fraction of the records to speed up calculations}
+\item{subsample}{Subsample a fraction of the records to speed up calculations. Default is 1, no subsampling.}
 
 \item{outfile}{name of html report file, default is rfaster2-report.html, written in the calling directory}
 }

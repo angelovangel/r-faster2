@@ -25,7 +25,7 @@ params:
   value: "Nanopore"
   input: select
 ---
-Generated with the [rfaster2](https://github.com/angelovangel/rfaster2) package on `r format.Date(Sys.time())`.   
+Generated with the [rfaster2](https://github.com/angelovangel/rfaster2) package (v`r packageVersion('rfaster2')`) on `r format.Date(Sys.time())`.   
 
 ***
 
@@ -110,7 +110,11 @@ df <- data.frame(
 	kmer_counts = sapply(kmers, spark_kmers), 
 	row.names = NULL
   )
-table2_caption <- "Table 2. Density distributions of length, GC-content and 'mean' q-score. The q-scores 10, 20, 30, 40 are in red"
+table2_caption <- paste0(
+  "Table 2. Density distributions of length, GC-content and 'mean' q-score. 
+  The q-scores 10, 20, 30, 40 are in red. The data has been subsampled  (fraction = ", round(params$subsample, 2), ")"
+  )
+
 df %>%
 	#dplyr::arrange(file) %>%
 	kableExtra::kbl(escape = F, caption = table2_caption) %>%
