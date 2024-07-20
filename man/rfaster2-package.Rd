@@ -9,7 +9,7 @@
 This package exports some of the functions of the Rust program faster2 in R. It can be used to get statistics about the records in a fastq/fastq.gz file.
 }
 \author{
-\strong{Maintainer}: Angel Angelov \email{aangeloo@gmail.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Angel Angelov \email{aangeloo@gmail.com}
 
 }
 \keyword{internal}

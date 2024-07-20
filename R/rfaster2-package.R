@@ -6,6 +6,7 @@
 #' @importFrom dplyr bind_rows
 #' @importFrom dplyr summarise
 #' @importFrom htmlwidgets JS
+#' @importFrom kableExtra kable_minimal
 #' @importFrom kableExtra kable_styling
 #' @importFrom kableExtra kbl
 #' @importFrom knitr kable
