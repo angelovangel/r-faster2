@@ -36,6 +36,17 @@ install.packages(
 )
 ```
 
+The following additional libraries are needed:
+
+```         
+dplyr
+htmlwidgets
+kableExtra
+knitr
+rmarkdown
+scales
+sparkline
+```
 
 ## Usage
 

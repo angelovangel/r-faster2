@@ -10,6 +10,7 @@
 #' @export
 
 fq_report <- function(inpath, pattern = 'fast(q|q.gz)$', platform = 'Nanopore', subsample = 1, outfile = 'rfaster2-report.html') {
+  realpath <- tools::file_path_as_absolute(inpath)
   calldir <- getwd()
   template <- paste0(system.file(package = 'rfaster2') , '/report.Rmd')
   if (subsample < 0 || subsample > 1) {
@@ -20,7 +21,7 @@ fq_report <- function(inpath, pattern = 'fast(q|q.gz)$', platform = 'Nanopore', 
     output_file = outfile,
     output_dir = calldir,
     params = list(
-      fastq_dir = inpath,
+      fastq_dir = realpath,
       fastq_pattern = pattern,
       subsample = subsample,
       platform = platform
