@@ -6,16 +6,16 @@ This package exports some of the functions of the Rust program [`faster2`](https
 
 ## Install
 
-If you have the rust toolchain
-
-``` r
-remotes::install_github('angelovangel/rfaster2')
-```
-
-If you don't have it, Rust can be installed with
+If you don't have Rust, run this in your shell:
 
 ``` bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+And then in `R`:
+
+``` r
+remotes::install_github('angelovangel/rfaster2')
 ```
 
 If you don't want to setup Rust, use compiled GitHub releases. Binary packages are available for Linux (x86_64)
@@ -23,8 +23,7 @@ If you don't want to setup Rust, use compiled GitHub releases. Binary packages a
 ``` r
 install.packages(
   "https://github.com/angelovangel/rfaster2/releases/download/v0.2.0/rfaster2_0.2.0_R_x86_64-pc-linux-gnu.tar.gz",
-  dependencies = TRUE,
-  repos = NULL
+  dependencies = TRUE
 )
 ```
 
@@ -33,10 +32,10 @@ and for macOS (aarch64, a.k.a. Apple Silicon)
 ``` r
 install.packages(
   "https://github.com/angelovangel/rfaster2/releases/download/v0.2.0/rfaster2_0.2.0_macos_aarch64.tgz",
-  dependencies = TRUE,
-  repos = NULL
+  dependencies = TRUE
 )
 ```
+
 
 ## Usage
 
@@ -61,4 +60,3 @@ fq_report('path/to/fastq/files')
 ```
 
 The html report will be saved in the R session working directory.
-
