@@ -77,13 +77,14 @@ The report contains
 
 kableExtra::kbl(
   stats, 
-  digits = 2, caption = 'Table 1. FASTQ files statistics', 
+  digits = 2, 
+  caption = 'Table 1. FASTQ files statistics', 
   format.args = list(big.mark = ",")
   ) %>%
   # kable_styling(
   #   full_width = T, fixed_thead = TRUE, bootstrap_options = c("responsive")
   # ) %>%
-  kable_minimal(lightable_options = 'hover')
+  kable_styling(bootstrap_options = 'hover', full_width = TRUE, fixed_thead = T)
 
 
 ```
@@ -120,7 +121,7 @@ df %>%
 	#dplyr::arrange(file) %>%
 	kableExtra::kbl(escape = F, caption = table2_caption) %>%
 	#kable_styling(fixed_thead = TRUE, bootstrap_options = c("responsive"))
-  kable_minimal()
+  kable_styling(full_width = TRUE, fixed_thead = T)
   
 ```
 

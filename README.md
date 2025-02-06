@@ -71,3 +71,4 @@ fq_report('path/to/fastq/files')
 ```
 
 The html report will be saved in the R session working directory.
+![](img/Screenshot.png)
