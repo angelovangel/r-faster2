@@ -25,7 +25,13 @@ params:
   value: "Nanopore"
   input: select
 ---
-Generated with the [rfaster2](https://github.com/angelovangel/rfaster2) package (v`r packageVersion('rfaster2')`) on `r format.Date(Sys.time())`.   
+
+```{r, include=F}
+commit <- strtrim(system("git rev-parse HEAD", intern=TRUE), 7)
+datetime <- format.Date(Sys.time())
+```
+
+Generated with the [rfaster2](https://github.com/angelovangel/rfaster2) package (commit ` `r commit` `) on `r datetime`.   
 
 ***
 

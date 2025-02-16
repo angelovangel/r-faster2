@@ -36,7 +36,7 @@ install.packages(
 )
 ```
 
-The following additional libraries are needed:
+The following additional `R` libraries are needed:
 
 ```         
 dplyr
